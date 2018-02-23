@@ -16,18 +16,16 @@ Bring a single ElasticSearch node up, with an instance of Logstash and Kibana vi
    * [Bringing up the stack](#bringing-up-the-stack)
    * [Initial setup](#initial-setup)
 3. [Configuration](#configuration)
-   * [How can I tune the Kibana configuration?](#how-can-i-tune-the-kibana-configuration)
-   * [How can I tune the Logstash configuration?](#how-can-i-tune-the-logstash-configuration)
-   * [How can I tune the Elasticsearch configuration?](#how-can-i-tune-the-elasticsearch-configuration)
-   * [How can I scale out the Elasticsearch cluster?](#how-can-i-scale-up-the-elasticsearch-cluster)
+   * [Kibana configuration?](#kibana-configuration)
+   * [Logstash configuration?](#logstash-configuration)
+   * [Elasticsearch configuration?](#elasticsearch-configuration)
+   * [Elasticsearch cluster?](#elasticsearch-cluster)
 4. [Storage](#storage)
-   * [How can I persist Elasticsearch data?](#how-can-i-persist-elasticsearch-data)
+   * [Elasticsearch data persistance](#elasticsearch-data persistance)
 5. [Extensibility](#extensibility)
    * [How can I add plugins?](#how-can-i-add-plugins)
    * [How can I enable the provided extensions?](#how-can-i-enable-the-provided-extensions)
 6. [JVM tuning](#jvm-tuning)
-   * [How can I specify the amount of memory used by a service?](#how-can-i-specify-the-amount-of-memory-used-by-a-service)
-   * [How can I enable a remote JMX connection to a service?](#how-can-i-enable-a-remote-jmx-connection-to-a-service)
 
 ## Requirements
 
@@ -38,7 +36,7 @@ Bring a single ElasticSearch node up, with an instance of Logstash and Kibana vi
 3. Clone this repository [Git Clone](https://github.com/chowden/docker-elk.git)
 
 
-## Usage
+## Getting Started
 
 ### Bringing up the stack
 
@@ -104,7 +102,7 @@ The created pattern will automatically be marked as the default index pattern as
 **NOTE**: Configuration is not dynamically reloaded, you will need to restart the stack after any change in the
 configuration of a component.
 
-### Kibana configuration tuning?
+### Kibana Configuration
 
 Kibana is configured inside the docker-compose file with two read-only files, the first one is the one you care about:
 
@@ -114,7 +112,7 @@ Kibana is configured inside the docker-compose file with two read-only files, th
 
 So best to save your changes offline and bring the stack back up.
 
-### Logstash configuration tuning?
+### Logstash Configuration
 
 The Logstash configuration is stored in `logstash/config/logstash.yml` and is similarly mapped as RO.
 
@@ -129,7 +127,7 @@ Logstash will be expecting a
 [`log4j2.properties`](https://github.com/elastic/logstash-docker/tree/master/build/logstash/config) file for its own
 logging.
 
-### How can I tune the Elasticsearch configuration?
+### ElasticSearch Configuration
 
 The Elasticsearch configuration is stored in `elasticsearch/config/elasticsearch.yml` and is mapped as RO - so any changes you make while docker cluster is up will not persist.
 
