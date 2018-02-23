@@ -6,8 +6,8 @@ services:
     build:
       context: elasticsearch/
     volumes:
-      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:rw
-      - ~/docker/elasticsearch/data:/usr/share/elasticsearch/data:rw
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ~/docker/elasticsearch/data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -20,8 +20,8 @@ services:
     build:
       context: logstash/
     volumes:
-      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:rw
-      - ./logstash/pipeline:/usr/share/logstash/pipeline:rw
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ~/docker/logstash/pipeline:/usr/share/logstash/pipeline
     ports:
       - "5000:5000"
     environment:
@@ -35,7 +35,7 @@ services:
     build:
       context: kibana/
     volumes:
-      - ./kibana/config/:/usr/share/kibana/config:rw
+      - ./kibana/config/:/usr/share/kibana/config
     ports:
       - "5601:5601"
     networks:
@@ -50,6 +50,22 @@ services:
       - ./heartbeat/config/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:rw
     networks:
       - elk
+  
+  metricbeat:
+    build:
+      context: metricbeat/ 
+    volumes:
+      - ./metricbeat/config/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:rw
+      - ./metricbeat/config/modules.d/:/usr/share/metricbeat/modules.d/
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - elk      
+    environment:
+      - "MYSQL_ROOT_PASSWORD=changemeplease"
+    depends_on:
+      - elasticsearch
+#      - nginx
+#      - apache2
 
 networks:
 
