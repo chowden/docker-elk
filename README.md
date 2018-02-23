@@ -44,13 +44,13 @@ Bring a single ElasticSearch node up, with an instance of Logstash and Kibana vi
 
 **Note**: In case you switched branch or updated a base image - you may need to run `docker-compose build` first
 
-Start the ELK stack using `docker-compose`:
+Change into the docker-elk directory that's been created and then start the ELK stack using `docker-compose`:
 
 ```console
 $ docker-compose up
 ```
 
-To run this stack in the background (detached mode):
+To run this stack in the background (detached mode - my personal preference):
 
 ```console
 $ docker-compose up -d
@@ -106,7 +106,7 @@ configuration of a component.
 
 ### How can I tune the Kibana configuration?
 
-Kibana is configured inside the docker-compose file with two read-only files:
+Kibana is configured inside the docker-compose file with two read-only files, the first one is the one you care about:
 
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
@@ -116,7 +116,7 @@ So best to save your changes offline and bring the stack back up.
 
 ### How can I tune the Logstash configuration?
 
-The Logstash configuration is stored in `logstash/config/logstash.yml` and is mapped as RO - so any changes you make while docker cluster is up will not persist.
+The Logstash configuration is stored in `logstash/config/logstash.yml` and is similarly mapped as RO.
 
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
@@ -165,7 +165,7 @@ This will store Elasticsearch data inside your home directoy under /docker/elast
 
 ## Extensibility
 
-### How can I add plugins?
+### Plugins
 
 To add plugins to any ELK component you have to:
 
@@ -183,45 +183,8 @@ of them require manual changes to the default ELK configuration.
 
 ## JVM tuning
 
-### How can I specify the amount of memory used by a service?
+Logstash and Elastic are configured with 256Mb:
 
-By default, both Elasticsearch and Logstash start with [1/4 of the total host
-memory](https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/parallel.html#default_heap_size) allocated to
-the JVM Heap Size.
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
 
-The startup scripts for Elasticsearch and Logstash can append extra JVM options from the value of an environment
-variable, allowing the user to adjust the amount of memory that can be used by each component:
-
-| Service       | Environment variable |
-|---------------|----------------------|
-| Elasticsearch | ES_JAVA_OPTS         |
-| Logstash      | LS_JAVA_OPTS         |
-
-To accomodate environments where memory is scarce (Docker for Mac has only 2 GB available by default), the Heap Size
-allocation is capped by default to 256MB per service in the `docker-compose.yml` file. If you want to override the
-default JVM configuration, edit the matching environment variable(s) in the `docker-compose.yml` file.
-
-For example, to increase the maximum JVM Heap Size for Logstash:
-
-```yml
-logstash:
-
-  environment:
-    LS_JAVA_OPTS: "-Xmx1g -Xms1g"
-```
-
-### How can I enable a remote JMX connection to a service?
-
-As for the Java Heap memory (see above), you can specify JVM options to enable JMX and map the JMX port on the docker
-host.
-
-Update the `{ES,LS}_JAVA_OPTS` environment variable with the following content (I've mapped the JMX service on the port
-18080, you can change that). Do not forget to update the `-Djava.rmi.server.hostname` option with the IP address of your
-Docker host (replace **DOCKER_HOST_IP**):
-
-```yml
-logstash:
-
-  environment:
-    LS_JAVA_OPTS: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=18080 -Dcom.sun.management.jmxremote.rmi.port=18080 -Djava.rmi.server.hostname=DOCKER_HOST_IP -Dcom.sun.management.jmxremote.local.only=false"
-```
