@@ -104,28 +104,19 @@ configuration of a component.
 
 ### Kibana Configuration
 
-Kibana is configured inside the docker-compose file with two read-only files, the first one is the one you care about:
+Kibana is configured inside the docker-compose file a read-write file - logstash.yml:
 
     volumes:
-      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:rw
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
-
-So best to save your changes offline and bring the stack back up.
 
 ### Logstash Configuration
 
-The Logstash configuration is stored in `logstash/config/logstash.yml` and is similarly mapped as RO.
+The Logstash configuration is stored in `logstash/config/logstash.yml` and is similarly mapped as RW.
 
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
-
-Again, save your changes offline and bring the stack back up.
-
-It is also possible to map the entire `config` directory instead of a single file, however you must be aware that
-Logstash will be expecting a
-[`log4j2.properties`](https://github.com/elastic/logstash-docker/tree/master/build/logstash/config) file for its own
-logging.
 
 ### ElasticSearch Configuration
 

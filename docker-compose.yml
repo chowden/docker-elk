@@ -43,6 +43,14 @@ services:
     depends_on:
       - elasticsearch
 
+  heartbeat:
+    build:
+      context: heartbeat/
+    volumes:
+      - ./heartbeat/config/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:rw
+    networks:
+      - elk
+
 networks:
 
   elk:
