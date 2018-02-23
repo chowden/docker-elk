@@ -120,7 +120,7 @@ So best to save your changes offline and bring the stack back up.
 
 ### How can I tune the Logstash configuration?
 
-The Logstash configuration is stored in `logstash/config/logstash.yml`.
+The Logstash configuration is stored in `logstash/config/logstash.yml` and is mapped as RO - so any changes you make while docker cluster is up will not persist.
 
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
@@ -142,12 +142,12 @@ The Elasticsearch configuration is stored in `elasticsearch/config/elasticsearch
 
 ### How can I scale out the Elasticsearch cluster?
 
-Follow the instructions from the Wiki: [Scaling out
+Follow these useful instructions - it's a to-do or a fork of this build [Scaling out
 Elasticsearch](https://github.com/deviantony/docker-elk/wiki/Elasticsearch-cluster)
 
 ## Storage
 
-### How can I persist Elasticsearch data?
+### ElasticSearch Data Persistence
 
 The data stored in Elasticsearch will be persisted after container reboot on this configuration.
 
@@ -156,7 +156,7 @@ Inside the docker-compose.yml:
     volumes:
       - ~/docker/elasticsearch/data:/usr/share/elasticsearch/data:rw
 
-This will store Elasticsearch data inside `/path/to/storage`.
+This will store Elasticsearch data inside your home directoy under /docker/elasticsearch/data'
 
 **NOTE:** beware of these OS-specific considerations:
 * **Linux:** the [unprivileged `elasticsearch` user][esuser] is used within the Elasticsearch image, therefore the
