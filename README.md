@@ -6,13 +6,10 @@ Based on the official Docker images:
 * [logstash](https://github.com/elastic/logstash-docker)
 * [kibana](https://github.com/elastic/kibana-docker)
 
-**Note**: Other branches in this project are available:
-
 ## Contents
 
 1. [Requirements](#requirements)
    * [Host setup](#host-setup)
-   * [SELinux](#selinux)
 2. [Getting started](#getting-started)
    * [Bringing up the stack](#bringing-up-the-stack)
    * [Initial setup](#initial-setup)
@@ -36,17 +33,8 @@ Based on the official Docker images:
 
 1. Install [Docker](https://www.docker.com/community-edition#/download) version **1.10.0+**
 2. Install [Docker Compose](https://docs.docker.com/compose/install/) version **1.6.0+**
-3. Clone this repository [Git Clone](https://)
+3. Clone this repository [Git Clone](https://github.com/chowden/docker-elk)
 
-### SELinux
-
-On distributions which have SELinux enabled out-of-the-box you will need to either re-context the files or set SELinux
-into Permissive mode in order for docker-elk to start properly. For example on Redhat and CentOS, the following will
-apply the proper context:
-
-```console
-$ chcon -R system_u:object_r:admin_home_t:s0 docker-elk/
-```
 
 ## Usage
 
@@ -122,13 +110,23 @@ configuration of a component.
 
 ### How can I tune the Kibana configuration?
 
-The Kibana default configuration is stored in `kibana/config/kibana.yml`.
+Kibana is configured inside the docker-compose file with two read-only files:
 
-It is also possible to map the entire `config` directory instead of a single file.
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+
+So best to save your changes offline and bring the stack back up.
 
 ### How can I tune the Logstash configuration?
 
 The Logstash configuration is stored in `logstash/config/logstash.yml`.
+
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+
+So best to save your changes offline and bring the stack back up.
 
 It is also possible to map the entire `config` directory instead of a single file, however you must be aware that
 Logstash will be expecting a
@@ -137,17 +135,10 @@ logging.
 
 ### How can I tune the Elasticsearch configuration?
 
-The Elasticsearch configuration is stored in `elasticsearch/config/elasticsearch.yml`.
+The Elasticsearch configuration is stored in `elasticsearch/config/elasticsearch.yml` and is mapped as RO - so any changes you make while docker cluster is up will not persist.
 
-You can also specify the options you want to override directly via environment variables:
-
-```yml
-elasticsearch:
-
-  environment:
-    network.host: "_non_loopback_"
-    cluster.name: "my-cluster"
-```
+    volumes:
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
 
 ### How can I scale out the Elasticsearch cluster?
 
