@@ -1,14 +1,5 @@
 # Docker ELK stack
 
-[![Join the chat at https://gitter.im/deviantony/docker-elk](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/deviantony/docker-elk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Elastic Stack version](https://img.shields.io/badge/ELK-6.1.0-blue.svg?style=flat)](https://github.com/deviantony/docker-elk/issues/212)
-[![Build Status](https://api.travis-ci.org/deviantony/docker-elk.svg?branch=master)](https://travis-ci.org/deviantony/docker-elk)
-
-Run the latest version of the ELK (Elasticsearch, Logstash, Kibana) stack with Docker and Docker Compose.
-
-It will give you the ability to analyze any data set by using the searching/aggregation capabilities of Elasticsearch
-and the visualization power of Kibana.
-
 Based on the official Docker images:
 
 * [elasticsearch](https://github.com/elastic/elasticsearch-docker)
@@ -16,10 +7,6 @@ Based on the official Docker images:
 * [kibana](https://github.com/elastic/kibana-docker)
 
 **Note**: Other branches in this project are available:
-
-* ELK 6 with X-Pack support: https://github.com/deviantony/docker-elk/tree/x-pack
-* ELK 6 in Vagrant: https://github.com/deviantony/docker-elk/tree/vagrant
-* ELK 6 with Search Guard: https://github.com/deviantony/docker-elk/tree/searchguard
 
 ## Contents
 
@@ -49,7 +36,7 @@ Based on the official Docker images:
 
 1. Install [Docker](https://www.docker.com/community-edition#/download) version **1.10.0+**
 2. Install [Docker Compose](https://docs.docker.com/compose/install/) version **1.6.0+**
-3. Clone this repository
+3. Clone this repository [Git Clone](https://)
 
 ### SELinux
 
@@ -73,7 +60,7 @@ Start the ELK stack using `docker-compose`:
 $ docker-compose up
 ```
 
-You can also choose to run it in background (detached mode):
+To run this stack in the background (detached mode):
 
 ```console
 $ docker-compose up -d
@@ -171,17 +158,12 @@ Elasticsearch](https://github.com/deviantony/docker-elk/wiki/Elasticsearch-clust
 
 ### How can I persist Elasticsearch data?
 
-The data stored in Elasticsearch will be persisted after container reboot but not after container removal.
+The data stored in Elasticsearch will be persisted after container reboot on this configuration.
 
-In order to persist Elasticsearch data even after removing the Elasticsearch container, you'll have to mount a volume on
-your Docker host. Update the `elasticsearch` service declaration to:
+Inside the docker-compose.yml:
 
-```yml
-elasticsearch:
-
-  volumes:
-    - /path/to/storage:/usr/share/elasticsearch/data
-```
+    volumes:
+      - ~/docker/elasticsearch/data:/usr/share/elasticsearch/data:rw
 
 This will store Elasticsearch data inside `/path/to/storage`.
 
