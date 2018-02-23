@@ -104,7 +104,7 @@ The created pattern will automatically be marked as the default index pattern as
 **NOTE**: Configuration is not dynamically reloaded, you will need to restart the stack after any change in the
 configuration of a component.
 
-### How can I tune the Kibana configuration?
+### Kibana configuration tuning?
 
 Kibana is configured inside the docker-compose file with two read-only files, the first one is the one you care about:
 
@@ -114,7 +114,7 @@ Kibana is configured inside the docker-compose file with two read-only files, th
 
 So best to save your changes offline and bring the stack back up.
 
-### How can I tune the Logstash configuration?
+### Logstash configuration tuning?
 
 The Logstash configuration is stored in `logstash/config/logstash.yml` and is similarly mapped as RO.
 
@@ -122,7 +122,7 @@ The Logstash configuration is stored in `logstash/config/logstash.yml` and is si
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
 
-So best to save your changes offline and bring the stack back up.
+Again, save your changes offline and bring the stack back up.
 
 It is also possible to map the entire `config` directory instead of a single file, however you must be aware that
 Logstash will be expecting a
