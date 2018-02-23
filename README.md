@@ -6,6 +6,8 @@ Based on the official Docker images:
 * [logstash](https://github.com/elastic/logstash-docker)
 * [kibana](https://github.com/elastic/kibana-docker)
 
+Bring a single ElasticSearch node up, with an instance of Logstash and Kibana via docker-compose.
+
 ## Contents
 
 1. [Requirements](#requirements)
@@ -33,7 +35,7 @@ Based on the official Docker images:
 
 1. Install [Docker](https://www.docker.com/community-edition#/download) version **1.10.0+**
 2. Install [Docker Compose](https://docs.docker.com/compose/install/) version **1.6.0+**
-3. Clone this repository [Git Clone](https://github.com/chowden/docker-elk)
+3. Clone this repository [Git Clone](https://github.com/chowden/docker-elk.git)
 
 
 ## Usage
@@ -54,19 +56,13 @@ To run this stack in the background (detached mode):
 $ docker-compose up -d
 ```
 
-Give Kibana a few seconds to initialize, then access the Kibana web UI by hitting
-[http://localhost:5601](http://localhost:5601) with a web browser.
+Kibana is exposed on localhost, port 5601. [http://localhost:5601](http://localhost:5601) 
 
 By default, the stack exposes the following ports:
 * 5000: Logstash TCP input.
 * 9200: Elasticsearch HTTP
 * 9300: Elasticsearch TCP transport
 * 5601: Kibana
-
-**WARNING**: If you're using `boot2docker`, you must access it via the `boot2docker` IP address instead of `localhost`.
-
-**WARNING**: If you're using *Docker Toolbox*, you must access it via the `docker-machine` IP address instead of
-`localhost`.
 
 Now that the stack is running, you will want to inject some log entries. The shipped Logstash configuration allows you
 to send content via TCP:
